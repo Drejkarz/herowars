@@ -8,6 +8,8 @@ import {
   extractEnemyDefence,
   extractGcAllyDefence,
   extractGcEnemyDefence,
+  extractGcEnemyMeta,
+  extractGwEnemyMeta,
   extractOwnChampDefence,
   extractOwnName,
   extractRoster,
@@ -19,7 +21,7 @@ import {
   formatMemberDefence,
   formatOwnMystats,
 } from './format.js';
-import type { CallMap, EnemyDefence } from './types.js';
+import type { CallMap, EnemyDefence, EnemyMeta } from './types.js';
 
 function $(id: string): HTMLElement | null {
   return document.getElementById(id);
@@ -56,6 +58,39 @@ function wireCopyButtons(root: ParentNode): void {
   for (const btn of root.querySelectorAll<HTMLButtonElement>('button.copy')) {
     attachCopy(btn);
   }
+}
+
+// Formats a Unix-seconds timestamp as a local "YYYY-MM-DD HH:mm" string. Empty if invalid.
+function formatTs(ts: number | null): string {
+  if (!ts || !isFinite(ts)) return '';
+  const d = new Date(ts * 1000);
+  if (isNaN(d.getTime())) return '';
+  const pad = (n: number): string => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// Renders an "Enemy clan: <name> · <server> · <date>" header into the given container.
+// Returns the count of populated fields (0 means nothing rendered).
+function renderEnemyMeta(container: HTMLElement, meta: EnemyMeta | null): void {
+  if (!meta) return;
+  const parts: string[] = [];
+  if (meta.clanName) parts.push(`<strong>${escapeHtml(meta.clanName)}</strong>`);
+  const subBits: string[] = [];
+  if (meta.serverId) subBits.push(`server ${escapeHtml(meta.serverId)}`);
+  if (meta.membersCount) subBits.push(`${escapeHtml(meta.membersCount)} members`);
+  const dateStr = formatTs(meta.dateTs);
+  if (dateStr) {
+    const labelPrefix = meta.dateLabel ? `${escapeHtml(meta.dateLabel)}: ` : '';
+    subBits.push(`${labelPrefix}${escapeHtml(dateStr)}`);
+  } else if (meta.dateLabel) {
+    subBits.push(escapeHtml(meta.dateLabel));
+  }
+  if (!parts.length && !subBits.length) return;
+  const sub = subBits.length ? ` <span class="enemy-meta-sub">${subBits.join(' · ')}</span>` : '';
+  const div = document.createElement('div');
+  div.className = 'enemy-meta';
+  div.innerHTML = parts.join(' ') + sub;
+  container.prepend(div);
 }
 
 export interface OwnRenderResult {
@@ -199,6 +234,7 @@ export function renderEnemies(callMap: CallMap): number {
   const container = $('enemy-defence-list');
   if (!container) return 0;
   const count = renderDefenceMap(container, enemies, 'enemy');
+  renderEnemyMeta(container, extractGwEnemyMeta(callMap));
   const section = $('enemy-defence-section');
   if (section) section.hidden = count === 0;
   const empty = $('normal-enemies-empty');
@@ -278,6 +314,7 @@ export function renderChampEnemies(callMap: CallMap): number {
   if (!list) return 0;
 
   const count = renderDefenceMap(list, enemies, 'gc-enemy');
+  renderEnemyMeta(list, extractGcEnemyMeta(callMap));
   const section = $('champ-enemy-defence-section');
   if (section) section.hidden = count === 0;
   if (empty) empty.hidden = count > 0;

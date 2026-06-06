@@ -280,6 +280,24 @@ button.copy.ok {
   box-shadow: 0 0 8px rgba(245,197,66,0.4), 0 1px 0 rgba(0,0,0,0.3);
 }
 
+/* Enemy clan metadata header */
+.enemy-meta {
+  margin-bottom: 1rem;
+  padding: 0.55rem 0.9rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+.enemy-meta strong {
+  color: var(--gold, #f5c542);
+}
+.enemy-meta-sub {
+  margin-left: 0.5rem;
+  opacity: 0.75;
+  font-size: 0.85rem;
+}
+
 /* Info banner */
 .info-banner {
   background: linear-gradient(180deg, rgba(138,78,214,0.18) 0%, rgba(138,78,214,0.08) 100%);

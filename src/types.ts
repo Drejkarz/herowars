@@ -48,10 +48,26 @@ export interface EnemySlot {
   slotId?: number;
 }
 
+export interface EnemyClan {
+  id?: string;
+  title?: string;
+  serverId?: string;
+  membersCount?: string;
+  level?: string;
+  minLevel?: string;
+}
+
 export interface WarInfo {
   enemySlots?: Record<string, EnemySlot | undefined>;
   mode?: string;
   day?: number;
+  season?: number;
+  endTime?: number;
+  nextWarTime?: number;
+  league?: number;
+  points?: number;
+  enemyPoints?: number;
+  enemyClan?: EnemyClan;
 }
 
 export interface WarlordResponse {
@@ -72,12 +88,28 @@ export interface GcSlot {
   slotId?: number;
 }
 
+export interface ChampSeasonStage {
+  dayTs?: number;
+  stageType?: string;
+  startHour?: number;
+  lockHour?: number;
+  endHour?: number;
+}
+
 export interface ChampInfoResponse {
   warInfo?: {
     ourSlots?: Record<string, GcSlot | undefined>;
     enemySlots?: Record<string, GcSlot | undefined>;
     enemyClanMembers?: Record<string, { id?: string | number; name?: string } | undefined>;
     mode?: string;
+    enemyClan?: EnemyClan;
+    enemyId?: string;
+    points?: number;
+    enemyPoints?: number;
+  };
+  seasonStatus?: {
+    current?: ChampSeasonStage;
+    next?: ChampSeasonStage;
   };
 }
 
@@ -109,6 +141,18 @@ export interface EnemyDefence {
 export interface OwnChampDefence {
   heroSlots: Unit[][];
   titanSlots: Unit[][];
+}
+
+// Metadata about the opposing clan in a GW/GC war.
+export interface EnemyMeta {
+  clanName: string | null;
+  clanId: string | null;
+  serverId: string | null;
+  membersCount: string | null;
+  // Unix seconds. Best-effort; null if unknown.
+  dateTs: number | null;
+  // Free-form context shown next to the date (e.g., "GW season 202620 · day 1", "GC day").
+  dateLabel: string | null;
 }
 
 // Type guards.

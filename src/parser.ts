@@ -6,6 +6,7 @@ import {
   type ChampInfoResponse,
   type ClanInfoResponse,
   type EnemyDefence,
+  type EnemyMeta,
   type GcSlot,
   type MemberDefence,
   type OwnChampDefence,
@@ -266,6 +267,42 @@ export function extractGcAllyDefence(callMap: CallMap): Record<string, EnemyDefe
   const members = extractClanMembers(callMap);
   const nameLookup = (uid: string): string => members[uid] ?? `?uid=${uid}`;
   return extractGcSlots(slots, nameLookup);
+}
+
+// Pulls enemy clan name + war/season timing out of the GW (clanWarGetWarlordInfo) response.
+// Returns null when no GW data is present.
+export function extractGwEnemyMeta(callMap: CallMap): EnemyMeta | null {
+  const resp = callMap.get(CALL_WARLORD) as WarlordResponse | undefined;
+  const wi = resp?.warInfo;
+  if (!wi || !wi.enemyClan) return null;
+  const labelParts: string[] = [];
+  if (typeof wi.season === 'number') labelParts.push(`season ${wi.season}`);
+  if (typeof wi.day === 'number') labelParts.push(`day ${wi.day}`);
+  return {
+    clanName: wi.enemyClan.title ?? null,
+    clanId: wi.enemyClan.id ?? null,
+    serverId: wi.enemyClan.serverId ?? null,
+    membersCount: wi.enemyClan.membersCount ?? null,
+    dateTs: typeof wi.endTime === 'number' ? wi.endTime : null,
+    dateLabel: labelParts.length ? `GW ${labelParts.join(' · ')}` : 'GW',
+  };
+}
+
+// Pulls enemy clan name + GC day timestamp from clanWarChampInfo_getInfo.
+// Returns null when no GC war data is present.
+export function extractGcEnemyMeta(callMap: CallMap): EnemyMeta | null {
+  const resp = callMap.get(CALL_CHAMP_INFO) as ChampInfoResponse | undefined;
+  const wi = resp?.warInfo;
+  if (!wi || !wi.enemyClan) return null;
+  const dayTs = resp?.seasonStatus?.current?.dayTs;
+  return {
+    clanName: wi.enemyClan.title ?? null,
+    clanId: wi.enemyClan.id ?? null,
+    serverId: wi.enemyClan.serverId ?? null,
+    membersCount: wi.enemyClan.membersCount ?? null,
+    dateTs: typeof dayTs === 'number' ? dayTs : null,
+    dateLabel: 'GC day',
+  };
 }
 
 // Set<uid> of clan members participating in the current war.
