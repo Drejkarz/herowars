@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.har
+HWA.json
+hwa mapping.json
+heroes
+hwa_clan_defence.py
+.DS_Store
+.vscode/

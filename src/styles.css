@@ -1,0 +1,312 @@
+/* Hero Wars Alliance — game-themed dark UI */
+:root {
+  --bg-deep: #0d0d1f;
+  --bg: #1a1a35;
+  --bg-elev: #232348;
+  --surface: #2c2c5a;
+  --surface-2: #34346e;
+  --border: #4a3f7a;
+  --border-strong: #6f5cb0;
+
+  --text: #f4ecda;
+  --muted: #a39ec5;
+  --muted-2: #7770a0;
+
+  --gold: #f5c542;
+  --gold-soft: #ffd96b;
+  --violet: #8a4ed6;
+  --violet-soft: #b78cff;
+  --rose: #d6489a;
+
+  --ok-bg: #1f4d36;
+  --ok-text: #7cf0a8;
+  --err-bg: #4a1a2a;
+  --err-text: #ff8aa6;
+
+  --shadow: 0 2px 6px rgba(0,0,0,0.35), 0 0 0 1px rgba(138,78,214,0.15);
+  --shadow-strong: 0 4px 20px rgba(0,0,0,0.5), 0 0 0 1px rgba(183,140,255,0.25);
+  --inner-glow: inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -1px 0 rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(138,78,214,0.18), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(214,72,154,0.12), transparent 60%),
+    var(--bg-deep);
+  background-attachment: fixed;
+  min-height: 100%;
+}
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1.25rem 3rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+h1 {
+  margin: 0 0 1.25rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--gold);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6), 0 0 18px rgba(245,197,66,0.25);
+}
+h2 {
+  margin: 1.75rem 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  color: var(--gold-soft);
+  background: rgba(0,0,0,0.3);
+  padding: 0.05em 0.35em;
+  border-radius: 4px;
+}
+
+/* Drop zone */
+#drop {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg-elev) 100%);
+  border: 2px dashed var(--border-strong);
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  color: var(--muted);
+  box-shadow: var(--shadow);
+}
+#drop:hover {
+  border-color: var(--violet-soft);
+  box-shadow: var(--shadow-strong);
+}
+#drop.drag {
+  background: linear-gradient(180deg, rgba(138,78,214,0.25) 0%, rgba(138,78,214,0.1) 100%);
+  border-color: var(--gold);
+  color: var(--gold-soft);
+}
+#drop .drop-main { color: var(--text); margin-bottom: 0.4rem; font-weight: 500; }
+#file { position: absolute; left: -9999px; opacity: 0; }
+.file-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.45rem 1rem;
+  background: linear-gradient(180deg, var(--violet) 0%, #6f3ab5 100%);
+  color: #fff;
+  border: 1px solid var(--violet-soft);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow), var(--inner-glow);
+}
+.file-btn:hover { filter: brightness(1.1); box-shadow: var(--shadow-strong); }
+.file-btn:active { transform: translateY(1px); }
+
+/* Status / stats */
+#status {
+  margin: 0.875rem 0 0.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  background: transparent;
+}
+#status.error {
+  color: var(--err-text);
+  background: var(--err-bg);
+  border: 1px solid rgba(255,138,166,0.25);
+}
+#stats {
+  margin: 0.25rem 0 1.5rem;
+  color: var(--muted-2);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+/* Tabs */
+nav.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+  padding: 0 0.25rem;
+}
+nav.tabs button {
+  background: transparent;
+  border: none;
+  padding: 0.7rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: inherit;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  border-radius: 6px 6px 0 0;
+}
+nav.tabs button:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+nav.tabs button.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(245,197,66,0.5);
+  background: rgba(245,197,66,0.06);
+}
+
+/* Cards */
+.card {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg-elev) 100%);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: var(--shadow), var(--inner-glow);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-strong), var(--inner-glow); }
+.card + .card { margin-top: 0; }
+.card textarea + .card-row { margin-top: 0.5rem; }
+.card-row { margin-top: 0.75rem; }
+.card-row:first-child { margin-top: 0; }
+.card h3 { display: flex; align-items: center; gap: 0.5rem; }
+
+textarea {
+  width: 100%;
+  min-height: 4rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.825rem;
+  line-height: 1.45;
+  color: var(--text);
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(245,197,66,0.18);
+}
+textarea::selection { background: rgba(245,197,66,0.4); color: #fff; }
+
+/* Buttons */
+button.copy {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.95rem;
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg-elev) 100%);
+  color: var(--gold-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--inner-glow);
+}
+button.copy:hover {
+  background: linear-gradient(180deg, var(--violet) 0%, #6f3ab5 100%);
+  color: #fff;
+  border-color: var(--violet-soft);
+  box-shadow: 0 0 0 1px rgba(183,140,255,0.4), 0 2px 8px rgba(138,78,214,0.4);
+}
+button.copy.ok {
+  background: linear-gradient(180deg, #2a6b48 0%, #1f4d36 100%);
+  color: var(--ok-text);
+  border-color: #4cae7a;
+}
+
+/* Controls row (lives inside Normal: Allies tab only) */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1.1rem;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg-elev) 100%);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow), var(--inner-glow);
+}
+.controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+}
+.controls input[type="checkbox"] {
+  accent-color: var(--gold);
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Badges (Active in war pill) */
+.badge {
+  display: inline-block;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--gold) 0%, #d6a020 100%);
+  color: #2a1a00;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  box-shadow: 0 0 8px rgba(245,197,66,0.4), 0 1px 0 rgba(0,0,0,0.3);
+}
+
+/* Info banner */
+.info-banner {
+  background: linear-gradient(180deg, rgba(138,78,214,0.18) 0%, rgba(138,78,214,0.08) 100%);
+  color: var(--violet-soft);
+  border: 1px solid rgba(138,78,214,0.4);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--inner-glow);
+}
+
+.empty-hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 1.25rem;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg-elev) 100%);
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Section heading inside cards / sub-sections */
+section[data-tab] > h2:first-child { margin-top: 0.5rem; }
+
+/* Scrollbar polish (webkit) */
+textarea::-webkit-scrollbar { width: 10px; height: 10px; }
+textarea::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 6px; }
+textarea::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 6px; }
+textarea::-webkit-scrollbar-thumb:hover { background: var(--violet); }

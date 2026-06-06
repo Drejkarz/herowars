@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HWA /mystats helper</title>
+</head>
+<body>
+<h1>HWA /mystats helper</h1>
+
+<div id="drop">
+  <div class="drop-main">Drop a <code>.har</code> file here</div>
+  <div>or <label for="file" class="file-btn">Browse&hellip;</label></div>
+  <input type="file" id="file" accept=".har,application/json">
+</div>
+
+<div id="status">No file loaded.</div>
+<div id="stats"></div>
+
+<nav class="tabs" role="tablist">
+  <button type="button" data-tab-btn="my-stats" role="tab">My stats</button>
+  <button type="button" data-tab-btn="normal-allies" role="tab" class="active">GW: Allies</button>
+  <button type="button" data-tab-btn="normal-enemies" role="tab">GW: Enemies</button>
+  <button type="button" data-tab-btn="champ-allies" role="tab">GC: Allies</button>
+  <button type="button" data-tab-btn="champ-enemies" role="tab">GC: Enemies</button>
+</nav>
+
+<section data-tab="my-stats" hidden>
+  <h2>Your /mystats</h2>
+  <div id="my-stats-body">
+    <div class="empty-hint">Load a HAR to see this tab.</div>
+  </div>
+</section>
+
+<section data-tab="normal-allies">
+  <div class="controls">
+    <label><input type="checkbox" id="pad"> Pad missing units with <code>:10000</code></label>
+    <label><input type="checkbox" id="active-only"> Show only active war participants</label>
+  </div>
+
+  <section id="defence-section" hidden>
+    <h2>GW ally defence</h2>
+    <div id="defence-list"></div>
+  </section>
+
+  <div id="normal-allies-empty" class="empty-hint">Load a HAR to see this tab.</div>
+</section>
+
+<section data-tab="normal-enemies" hidden>
+  <section id="enemy-defence-section" hidden>
+    <h2>GW enemy defence</h2>
+    <div id="enemy-defence-list"></div>
+  </section>
+
+  <div id="normal-enemies-empty" class="empty-hint">Load a HAR to see this tab.</div>
+</section>
+
+<section data-tab="champ-allies" hidden>
+  <div class="controls">
+    <label><input type="checkbox" id="pad-gc"> Pad missing units with <code>:10000</code></label>
+  </div>
+  <h2>GC ally defence</h2>
+  <div id="champ-allies-banner" class="info-banner" hidden></div>
+  <div id="champ-allies-body">
+    <div class="empty-hint">Load a HAR to see this tab.</div>
+  </div>
+</section>
+
+<section data-tab="champ-enemies" hidden>
+  <section id="champ-enemy-defence-section" hidden>
+    <h2>GC enemy defence</h2>
+    <div id="champ-enemy-defence-list"></div>
+  </section>
+
+  <div id="champ-enemies-empty" class="empty-hint">
+    No GC (Guild Championship) enemy data in this HAR. Capture a HAR during an active championship-mode war (with the war screen open) and the page will populate this tab automatically.
+  </div>
+</section>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
